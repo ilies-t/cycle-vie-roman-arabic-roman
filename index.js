@@ -15,6 +15,11 @@ const romanMap = {
     V: 5,
     IV: 4,
     I: 1
+};
+
+const validateRoman = (roman) => {
+    const regex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+    return regex.test(roman);
 }
 
 const IntToRoman = (num) => {
@@ -28,27 +33,67 @@ const IntToRoman = (num) => {
     return roman;
 }
 
+const RomanToInt = (roman) => {
+    let num = 0;
+    for (i in romanMap) {
+        while (roman.indexOf(i) === 0) {
+            num += romanMap[i];
+            roman = roman.replace(i, '');
+        }
+    }
+    return num;
+}
+
 app.get('/', (req, res) => {
-    const form = `
+    const form1 = `
         <form action="/roman" method="get">
-            <label for="num">Enter a number:</label>
+            <label for="num">Entrez un nombre:</label>
             <input type="number" id="num" name="num" required>
-            <button type="submit">Convert to Roman</button>
+            <button type="submit">Convertir en chiffres romains</button>
         </form>
     `;
-    res.send(form);
+    const form2 = `
+        <form action="/int" method="get">
+            <label for="roman">Entrez un chiffre romain:</label>
+            <input type="text" id="roman" name="roman" required>
+            <button type="submit">Convertir en entier</button>
+        </form>
+    `;
+    res.send(form1 + form2);
 });
 
 app.get('/roman', (req, res) => {
     try {
         const num = parseInt(req.query.num);
         const roman = IntToRoman(num);
-        res.send(`The Roman numeral equivalent of ${num} is ${roman}`);
+        if (!validateRoman(roman)) throw new Error();
+        res.send(`L'équivalent en chiffres romains de ${num} est ${roman}`);
     } catch (error) {
-        res.send("Invalid input");
+        res.send("Entrée invalide");
+    }
+});
+
+app.get('/int', (req, res) => {
+    try {
+        const roman = req.query.roman.toUpperCase();
+        if (!validateRoman(roman)) throw new Error();
+        const num = RomanToInt(roman);
+        res.send(`L'équivalent entier de ${roman} est ${num}`);
+    } catch (error) {
+        res.send("Entrée invalide");
+    }
+});
+
+app.get('/roman', (req, res) => {
+    try {
+        const num = parseInt(req.query.num);
+        const roman = IntToRoman(num);
+        res.send(`L'équivalent en chiffres romains de ${num} est ${roman}`);
+    } catch (error) {
+        res.send("Entrée invalide");
     }
 });
 
 app.listen(3000, () => {
-    console.log('Server listening on port 3000');
+    console.log('Serveur en écoute sur le port 3000');
 });
