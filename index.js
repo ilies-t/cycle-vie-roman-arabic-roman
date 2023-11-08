@@ -1,3 +1,6 @@
+const express = require('express');
+const app = express();
+
 const romanMap = {
     M: 1000,
     CM: 900,
@@ -25,4 +28,27 @@ const IntToRoman = (num) => {
     return roman;
 }
 
-console.log(IntToRoman(19));
+app.get('/', (req, res) => {
+    const form = `
+        <form action="/roman" method="get">
+            <label for="num">Enter a number:</label>
+            <input type="number" id="num" name="num" required>
+            <button type="submit">Convert to Roman</button>
+        </form>
+    `;
+    res.send(form);
+});
+
+app.get('/roman', (req, res) => {
+    try {
+        const num = parseInt(req.query.num);
+        const roman = IntToRoman(num);
+        res.send(`The Roman numeral equivalent of ${num} is ${roman}`);
+    } catch (error) {
+        res.send("Invalid input");
+    }
+});
+
+app.listen(3000, () => {
+    console.log('Server listening on port 3000');
+});

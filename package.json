@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ilies-t/cycle-vie-roman-arabic-roman/issues"
   },
-  "homepage": "https://github.com/ilies-t/cycle-vie-roman-arabic-roman#readme"
+  "homepage": "https://github.com/ilies-t/cycle-vie-roman-arabic-roman#readme",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
 }
