@@ -15,6 +15,11 @@ const romanMap = {
     V: 5,
     IV: 4,
     I: 1
+};
+
+const validateRoman = (roman) => {
+    const regex = /^(M{0,3})(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$/;
+    return regex.test(roman);
 }
 
 const IntToRoman = (num) => {
@@ -61,6 +66,7 @@ app.get('/roman', (req, res) => {
     try {
         const num = parseInt(req.query.num);
         const roman = IntToRoman(num);
+        if (!validateRoman(roman)) throw new Error();
         res.send(`L'équivalent en chiffres romains de ${num} est ${roman}`);
     } catch (error) {
         res.send("Entrée invalide");
@@ -70,6 +76,7 @@ app.get('/roman', (req, res) => {
 app.get('/int', (req, res) => {
     try {
         const roman = req.query.roman.toUpperCase();
+        if (!validateRoman(roman)) throw new Error();
         const num = RomanToInt(roman);
         res.send(`L'équivalent entier de ${roman} est ${num}`);
     } catch (error) {
