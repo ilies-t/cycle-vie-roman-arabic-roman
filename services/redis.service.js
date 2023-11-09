@@ -16,13 +16,13 @@ export class RedisService {
     }
 
     async saveOne(key, value) {
-        console.log(`Try to set key=${key}, value=${value}`);
+        console.log(`Set key=${key}, value=${value}`);
         await this.client.set(this.CACHE_PREFIX + key, value);
     }
 
     async getValue(romanOrIntKey) {
         const result = await this.client.get(this.CACHE_PREFIX + romanOrIntKey);
-        console.log(`Try to found key=${romanOrIntKey}, found=${result}`);
+        console.log(`Get key=${romanOrIntKey}, found=${result}`);
         return result;
     }
 }
