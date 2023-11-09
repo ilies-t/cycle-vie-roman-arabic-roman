@@ -23,6 +23,7 @@ const validateRoman = (roman) => {
 }
 
 const IntToRoman = (num) => {
+    if (num === 0) return "O";
     let roman = '';
     for (i in romanMap) {
         while (num >= romanMap[i]) {
@@ -34,6 +35,7 @@ const IntToRoman = (num) => {
 }
 
 const RomanToInt = (roman) => {
+    if (roman == "O") return 0;
     let num = 0;
     for (i in romanMap) {
         while (roman.indexOf(i) === 0) {
