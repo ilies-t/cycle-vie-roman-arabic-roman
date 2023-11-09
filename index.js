@@ -44,6 +44,17 @@ const RomanToInt = (roman) => {
     return num;
 }
 
+app.get('/api', (req, res) => {
+    try {
+        const roman = req.query.romanNumber.toUpperCase();
+        if (!validateRoman(roman)) throw new Error();
+        const num = RomanToInt(roman);
+        res.send({ status: 'OK', result: num });
+    } catch (error) {
+        res.send("Entrée invalide");
+    }
+});
+
 app.get('/', (req, res) => {
     const form1 = `
         <form action="/roman" method="get">
