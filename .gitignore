@@ -52,3 +52,5 @@ typings/
 .env
 .env.test
 .env.production
+
+.idea
