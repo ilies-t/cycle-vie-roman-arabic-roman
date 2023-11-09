@@ -26,12 +26,12 @@ const validateRoman = (roman) => {
 const IntToRoman = (num) => {
     const baseNum = num;
     if (num === 0) return "O";
-    const history = readData();
-    if (history.get(num.toString())) {
+    const inMemory = findInMemory(num);
+    if (inMemory) {
         // for any curious professor looking at the code,
         // console.log to see that the program is actually using the memory
         console.log('from memory');
-        return history.get(num.toString());
+        return inMemory;
     }
     let roman = '';
     for (i in romanMap) {
@@ -40,20 +40,19 @@ const IntToRoman = (num) => {
             num -= romanMap[i];
         }
     }
-    history.set(baseNum.toString(), roman)
-    fs.writeFileSync('./memory.json', JSON.stringify(Object.fromEntries(history)));
+    setMemory(roman, baseNum);
     return roman;
 }
 
 const RomanToInt = (roman) => {
     const baseRoman = roman;
     if (roman == "O") return 0;
-    const history = readData();
-    if (history.get(roman)) {
+    const inMemory = findInMemory(roman);
+    if (inMemory) {
         // for any curious professor looking at the code,
         // console.log to see that the program is actually using the memory
         console.log('from memory');
-        return history.get(roman);
+        return inMemory;
     }
     let num = 0;
     for (i in romanMap) {
@@ -62,16 +61,31 @@ const RomanToInt = (roman) => {
             roman = roman.replace(i, '');
         }
     }
-    history.set(baseRoman, num.toString());
-    fs.writeFileSync('./memory.json', JSON.stringify(Object.fromEntries(history)));
+    setMemory(baseRoman, num);
     return num;
 }
 
-const readData = () => {
+const getMemory = () => {
     let data = fs.readFileSync('./memory.json');
     data = new Map(Object.entries(JSON.parse(data)));
     return data;
 }
+
+const findInMemory = (key) => {
+    const history = getMemory();
+    if (history.get(key)) return history.get(key);
+    for (let [k, v] of history) {
+        if (v === key) return k;
+    }
+    return false;
+}
+
+const setMemory = (key, value) => {
+    const history = getMemory();
+    history.set(key, value);
+    fs.writeFileSync('./memory.json', JSON.stringify(Object.fromEntries(history)));
+}
+
 
 app.get('/api', (req, res) => {
     try {
