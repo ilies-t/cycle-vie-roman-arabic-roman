@@ -18,7 +18,6 @@
   },
   "homepage": "https://github.com/ilies-t/cycle-vie-roman-arabic-roman#readme",
   "dependencies": {
-    "express": "^4.18.2",
-    "fs": "^0.0.1-security"
+    "express": "^4.18.2"
   }
 }
